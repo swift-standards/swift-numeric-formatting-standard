@@ -75,6 +75,40 @@ extension Format.Numeric {
             let isNegative = doubleValue < 0
             let absoluteValue = abs(doubleValue)
 
+            // When no precision constraints, use String(value) for shortest representation
+            // Only use for values that String represents in decimal (not scientific notation)
+            if maximumFractionDigits == nil && minimumFractionDigits == nil {
+                let shortestRep = String(absoluteValue)
+
+                // Check if String used scientific notation (contains 'e' or 'E')
+                // If so, fall back to the old method
+                if !shortestRep.contains("e") && !shortestRep.contains("E") {
+                    // Parse to extract parts
+                    let parts = shortestRep.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)
+                    let integerPartString = String(parts[0])
+                    var fractionalPartString = parts.count > 1 ? String(parts[1]) : ""
+
+                    // Remove trailing ".0" - check if fractional part is just zeros
+                    if fractionalPartString.allSatisfy({ $0 == "0" }) {
+                        fractionalPartString = ""
+                    }
+
+                    // Format integer part with grouping if needed
+                    var integerString = integerPartString
+                    if let separator = groupingSeparator, integerString.count > 3 {
+                        integerString = addGroupingSeparator(to: integerString, separator: separator)
+                    }
+
+                    // Build result
+                    var result = integerString
+                    if !fractionalPartString.isEmpty {
+                        result += decimalSeparator + fractionalPartString
+                    }
+
+                    return isNegative ? "-\(result)" : result
+                }
+            }
+
             // Split into integer and fractional parts
             let integerPart = Int64(absoluteValue)
             var fractionalPart = absoluteValue - Double(integerPart)

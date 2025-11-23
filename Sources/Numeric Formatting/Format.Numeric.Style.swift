@@ -210,18 +210,54 @@ extension Format.Numeric.Style {
         let isNegative = doubleValue < 0
         let absoluteValue = abs(doubleValue)
 
+        // Apply minimum if specified
+        var effectiveMinFrac = minimumFractionDigits
+        if let incMin = incrementMinFrac {
+            effectiveMinFrac = max(effectiveMinFrac ?? 0, incMin)
+        }
+
+        // When no precision constraints are specified, use String(value) for shortest representation
+        // This avoids floating-point precision artifacts (e.g., 33.3 → "33.299999999999997")
+        // However, only use this for values that String represents in decimal (not scientific notation)
+        if maximumFractionDigits == nil && effectiveMinFrac == nil {
+            // Use Swift's built-in shortest decimal representation
+            let shortestRep = String(absoluteValue)
+
+            // Check if String used scientific notation (contains 'e' or 'E')
+            // If so, fall back to the old method
+            if !shortestRep.contains("e") && !shortestRep.contains("E") {
+                // Parse the string to extract integer and fractional parts
+                let parts = shortestRep.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)
+                let integerPartString = String(parts[0])
+                var fractionalPartString = parts.count > 1 ? String(parts[1]) : ""
+
+                // Remove trailing ".0" - check if fractional part is just zeros
+                if fractionalPartString.allSatisfy({ $0 == "0" }) {
+                    fractionalPartString = ""
+                }
+
+                // Convert integer part string to Int64 for formatting with grouping
+                let integerPart = Int64(integerPartString) ?? 0
+                let integerString = formatIntegerPart(integerPart)
+
+                // Build result
+                var result = integerString
+                if !fractionalPartString.isEmpty {
+                    result += decimalSeparator + fractionalPartString
+                } else if case .always = decimalSeparatorStrategy {
+                    result += decimalSeparator
+                }
+
+                return applySign(result, isNegative: isNegative, value: doubleValue)
+            }
+        }
+
         // Determine fraction digits to use for rounding
         var fractionDigits: Int
         if let max = maximumFractionDigits {
             fractionDigits = max
         } else {
             fractionDigits = 15  // Double precision
-        }
-
-        // Apply minimum if specified
-        var effectiveMinFrac = minimumFractionDigits
-        if let incMin = incrementMinFrac {
-            effectiveMinFrac = max(effectiveMinFrac ?? 0, incMin)
         }
 
         if let min = effectiveMinFrac {

@@ -387,4 +387,64 @@ struct `Format.Numeric.Style Tests` {
             #expect(double.formatted(.number.precision(.significantDigits(3))) == "2.72")
         }
     }
+
+    // MARK: - Floating-Point Precision
+
+    @Suite
+    struct `Floating-Point Precision` {
+
+        @Test
+        func `avoids floating-point precision artifacts`() {
+            // These values are commonly affected by binary floating-point representation
+            #expect(33.3.formatted(.number) == "33.3")
+            #expect(33.33.formatted(.number) == "33.33")
+            #expect(99.99.formatted(.number) == "99.99")
+            #expect(10.123456.formatted(.number) == "10.123456")
+            #expect(3.14159.formatted(.number) == "3.14159")
+        }
+
+        @Test
+        func `handles precise decimal values`() {
+            #expect(33.333333.formatted(.number) == "33.333333")
+            #expect(45.123456.formatted(.number) == "45.123456")
+            #expect(28.452.formatted(.number) == "28.452")
+        }
+
+        @Test
+        func `works with very large precise values`() {
+            #expect(9999.99.formatted(.number) == "9999.99")
+            #expect(440.123456.formatted(.number) == "440.123456")
+        }
+
+        @Test
+        func `preserves trailing zeros when precision specified`() {
+            #expect(33.30.formatted(.number.precision(.fractionLength(2))) == "33.30")
+            #expect(100.00.formatted(.number.precision(.fractionLength(2))) == "100.00")
+        }
+
+        @Test
+        func `removes trailing zeros by default`() {
+            #expect(75.0.formatted(.number) == "75")
+            #expect(100.0.formatted(.number) == "100")
+            #expect(42.50.formatted(.number) == "42.5")
+        }
+
+        @Test
+        func `handles common problematic fractions`() {
+            // 0.1, 0.2, 0.3 cannot be exactly represented in binary
+            #expect(0.1.formatted(.number) == "0.1")
+            #expect(0.2.formatted(.number) == "0.2")
+            #expect(0.3.formatted(.number) == "0.3")
+            #expect(1.2.formatted(.number) == "1.2")
+        }
+
+        @Test
+        func `works with arithmetic results`() {
+            let result1 = 100.0 - 33.3
+            let result2 = 33.3 + 33.3
+
+            #expect(result1.formatted(.number) == "66.7")
+            #expect(result2.formatted(.number) == "66.6")
+        }
+    }
 }
