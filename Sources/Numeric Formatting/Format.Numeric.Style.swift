@@ -182,11 +182,14 @@ extension Format.Numeric.Style {
 
                 // Determine decimal places in increment
                 // Only set minimum if increment has fractional part
-                if increment != Double(Int64(increment)) {
-                    let incStr = String(increment)
-                    if let dotIndex = incStr.firstIndex(of: ".") {
-                        incrementMinFrac = incStr.distance(from: incStr.index(after: dotIndex), to: incStr.endIndex)
+                if abs(increment - Double(Int64(increment))) > 1e-10 {
+                    var tempInc = increment
+                    var decimalPlaces = 0
+                    while abs(tempInc - Double(Int64(tempInc))) > 1e-10 && decimalPlaces < 15 {
+                        tempInc *= 10
+                        decimalPlaces += 1
                     }
+                    incrementMinFrac = decimalPlaces
                 }
             } else {
                 // Round to whole number
@@ -268,10 +271,7 @@ extension Format.Numeric.Style {
         // Round the entire value if we have a max fraction limit
         var roundedValue = absoluteValue
         if let max = maximumFractionDigits {
-            var multiplier: Double = 1.0
-            for _ in 0..<max {
-                multiplier *= 10.0
-            }
+            let multiplier = ISO_9899.Math.pow(10.0, Double(max))
             roundedValue = (absoluteValue * multiplier).rounded() / multiplier
         }
 
@@ -283,7 +283,7 @@ extension Format.Numeric.Style {
         let integerString = formatIntegerPart(integerPart)
 
         // Handle fractional part
-        if fractionalPart == 0 && effectiveMinFrac == nil {
+        if abs(fractionalPart) < 1e-10 && effectiveMinFrac == nil {
             // Whole number with no minimum fraction digits
             var result = integerString
             if case .always = decimalSeparatorStrategy {
@@ -295,10 +295,7 @@ extension Format.Numeric.Style {
         // Format fractional part
         var fractionalString = ""
         if fractionDigits > 0 {
-            var multiplier: Double = 1.0
-            for _ in 0..<fractionDigits {
-                multiplier *= 10.0
-            }
+            let multiplier = ISO_9899.Math.pow(10.0, Double(fractionDigits))
 
             // Don't round again here - already rounded the whole value above
             // Just add a tiny epsilon to handle floating point errors, then truncate
@@ -433,20 +430,9 @@ extension Format.Numeric.Style {
                 return applySign("0E0", isNegative: isNegative, value: value)
             }
 
-            var exponent = 0
-            var mantissa = absoluteValue
-
-            if mantissa >= 10 {
-                while mantissa >= 10 {
-                    mantissa /= 10
-                    exponent += 1
-                }
-            } else if mantissa < 1 {
-                while mantissa < 1 {
-                    mantissa *= 10
-                    exponent -= 1
-                }
-            }
+            // Use log10 for O(1) exponent calculation instead of O(log n) loop
+            let exponent = Int(ISO_9899.Math.floor(ISO_9899.Math.log10(absoluteValue)))
+            let mantissa = absoluteValue / ISO_9899.Math.pow(10.0, Double(exponent))
 
             let mantissaString = formatScientificMantissa(mantissa)
             let result = "\(mantissaString)E\(exponent)"
@@ -457,10 +443,7 @@ extension Format.Numeric.Style {
     private func formatCompactValue(_ value: Double) -> String {
         // Use precision if specified
         if let max = maximumFractionDigits {
-            var multiplier: Double = 1.0
-            for _ in 0..<max {
-                multiplier *= 10.0
-            }
+            let multiplier = ISO_9899.Math.pow(10.0, Double(max))
             let rounded = (value * multiplier).rounded() / multiplier
 
             let intPart = Int64(rounded)
@@ -540,7 +523,7 @@ extension Format.Numeric.Style {
             let intPart = Int64(rounded)
             let fracPart = rounded - Double(intPart)
 
-            if fracPart == 0 {
+            if abs(fracPart) < 1e-10 {
                 return String(intPart)
             }
 
@@ -572,7 +555,7 @@ extension Format.Numeric.Style {
         let intPart = Int64(rounded)
         let fracPart = rounded - Double(intPart)
 
-        if fracPart == 0 {
+        if abs(fracPart) < 1e-10 {
             return String(intPart)
         }
 
@@ -623,20 +606,13 @@ extension Format.Numeric.Style {
             targetDigits = max ?? min ?? 3
         }
 
-        // Find the magnitude (order of magnitude) of the number
-        var magnitude = 0
-        var testValue = absoluteValue
-
-        if testValue >= 1 {
-            while testValue >= 10 {
-                testValue /= 10
-                magnitude += 1
-            }
+        // Find the magnitude (order of magnitude) of the number using O(1) log10
+        let magnitude: Int
+        if absoluteValue >= 1 {
+            magnitude = Int(ISO_9899.Math.floor(ISO_9899.Math.log10(absoluteValue)))
         } else {
-            while testValue < 1 {
-                testValue *= 10
-                magnitude -= 1
-            }
+            // For values < 1, we need ceiling - 1
+            magnitude = Int(ISO_9899.Math.ceil(ISO_9899.Math.log10(absoluteValue))) - 1
         }
 
         // Calculate how many decimal places we need
