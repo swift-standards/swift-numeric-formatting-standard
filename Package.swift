@@ -16,6 +16,7 @@ import PackageDescription
 //
 // Pure Swift implementation with no Foundation dependencies,
 // suitable for Swift Embedded and constrained environments.
+// Uses ISO 9899 (C Standard Library Math) for O(1) hardware-accelerated power operations.
 
 let package = Package(
     name: "swift-numeric-formatting-standard",
@@ -33,9 +34,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../swift-standards"),
-        .package(path: "../swift-ieee-754"),
-        .package(path: "../swift-iso-9899"),
-        .package(path: "../swift-incits-4-1986")
+        .package(path: "../swift-iso-9899")
     ],
     targets: [
         .target(
@@ -43,9 +42,7 @@ let package = Package(
             dependencies: [
                 .product(name: "Standards", package: "swift-standards"),
                 .product(name: "Formatting", package: "swift-standards"),
-                .product(name: "IEEE 754", package: "swift-ieee-754"),
-                .product(name: "ISO 9899", package: "swift-iso-9899"),
-                .product(name: "INCITS 4 1986", package: "swift-incits-4-1986")
+                .product(name: "ISO 9899", package: "swift-iso-9899")
             ]
         ),
         .testTarget(

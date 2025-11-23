@@ -13,7 +13,7 @@ public import Formatting
 /// supporting precision control, notation styles, sign display, grouping separators,
 /// and scale transformations.
 ///
-/// Built on IEEE 754, ISO 9899, and INCITS 4-1986 standards.
+/// Built on ISO 9899 (C Standard Library Math) for hardware-accelerated operations.
 extension Format {
     public enum Numeric { }
 }

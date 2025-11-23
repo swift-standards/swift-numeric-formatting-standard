@@ -6,6 +6,7 @@
 //
 
 public import Formatting
+import ISO_9899
 
 extension Format.Numeric {
     /// Fluent numeric format style with builder pattern
@@ -533,7 +534,7 @@ extension Format.Numeric.Style {
                 return String(Int64(value.rounded()))
             }
 
-            let multiplier = power(10.0, decimalPlaces)
+            let multiplier = ISO_9899.Math.pow(10.0, Double(decimalPlaces))
             let rounded = (value * multiplier).rounded() / multiplier
 
             let intPart = Int64(rounded)
@@ -587,19 +588,6 @@ extension Format.Numeric.Style {
         }
 
         return "\(intPart).\(fracString)"
-    }
-
-    // Foundation-free power function for integer exponents
-    private func power(_ base: Double, _ exponent: Int) -> Double {
-        if exponent == 0 { return 1.0 }
-        if exponent < 0 {
-            return 1.0 / power(base, -exponent)
-        }
-        var result = 1.0
-        for _ in 0..<exponent {
-            result *= base
-        }
-        return result
     }
 
     private func formatWithSignificantDigits(_ value: Double, min: Int?, max: Int?) -> String {
@@ -658,11 +646,11 @@ extension Format.Numeric.Style {
         // Round to the appropriate number of decimal places
         let roundedValue: Double
         if decimalPlaces >= 0 {
-            let multiplier = power(10.0, decimalPlaces)
+            let multiplier = ISO_9899.Math.pow(10.0, Double(decimalPlaces))
             roundedValue = (absoluteValue * multiplier).rounded() / multiplier
         } else {
             // Need to round to nearest 10, 100, etc.
-            let divisor = power(10.0, -decimalPlaces)
+            let divisor = ISO_9899.Math.pow(10.0, Double(-decimalPlaces))
             roundedValue = (absoluteValue / divisor).rounded() * divisor
         }
 
@@ -724,7 +712,7 @@ extension Format.Numeric.Style {
 
             // Extract the significant digits by removing leading zeros
             // Scale up to get the significant part as an integer
-            let scaleFactor = power(10.0, -magnitude + targetDigits - 1)
+            let scaleFactor = ISO_9899.Math.pow(10.0, Double(-magnitude + targetDigits - 1))
             let scaledUp = (roundedValue * scaleFactor).rounded()
 
             // Convert to string and extract digits
