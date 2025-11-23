@@ -182,10 +182,10 @@ extension Format.Numeric.Style {
 
                 // Determine decimal places in increment
                 // Only set minimum if increment has fractional part
-                if abs(increment - Double(Int64(increment))) > 1e-10 {
+                if ISO_9899.Math.fabs(increment - Double(Int64(increment))) > 1e-10 {
                     var tempInc = increment
                     var decimalPlaces = 0
-                    while abs(tempInc - Double(Int64(tempInc))) > 1e-10 && decimalPlaces < 15 {
+                    while ISO_9899.Math.fabs(tempInc - Double(Int64(tempInc))) > 1e-10 && decimalPlaces < 15 {
                         tempInc *= 10
                         decimalPlaces += 1
                     }
@@ -212,7 +212,7 @@ extension Format.Numeric.Style {
         }
 
         let isNegative = doubleValue < 0
-        let absoluteValue = abs(doubleValue)
+        let absoluteValue = ISO_9899.Math.fabs(doubleValue)
 
         // Apply minimum if specified
         var effectiveMinFrac = minimumFractionDigits
@@ -283,7 +283,7 @@ extension Format.Numeric.Style {
         let integerString = formatIntegerPart(integerPart)
 
         // Handle fractional part
-        if abs(fractionalPart) < 1e-10 && effectiveMinFrac == nil {
+        if ISO_9899.Math.fabs(fractionalPart) < 1e-10 && effectiveMinFrac == nil {
             // Whole number with no minimum fraction digits
             var result = integerString
             if case .always = decimalSeparatorStrategy {
@@ -344,7 +344,7 @@ extension Format.Numeric.Style {
         }
 
         let isNegative = intValue < 0
-        let absoluteValue = abs(intValue)
+        let absoluteValue = intValue < 0 ? -intValue : intValue
 
         // Format integer part
         let integerString = formatIntegerPart(absoluteValue)
@@ -403,7 +403,7 @@ extension Format.Numeric.Style {
 
     private func formatWithNotation(_ value: Double) -> String {
         let isNegative = value < 0
-        let absoluteValue = abs(value)
+        let absoluteValue = ISO_9899.Math.fabs(value)
 
         switch notation {
         case .automatic:
@@ -523,7 +523,7 @@ extension Format.Numeric.Style {
             let intPart = Int64(rounded)
             let fracPart = rounded - Double(intPart)
 
-            if abs(fracPart) < 1e-10 {
+            if ISO_9899.Math.fabs(fracPart) < 1e-10 {
                 return String(intPart)
             }
 
@@ -555,7 +555,7 @@ extension Format.Numeric.Style {
         let intPart = Int64(rounded)
         let fracPart = rounded - Double(intPart)
 
-        if abs(fracPart) < 1e-10 {
+        if ISO_9899.Math.fabs(fracPart) < 1e-10 {
             return String(intPart)
         }
 
@@ -575,7 +575,7 @@ extension Format.Numeric.Style {
 
     private func formatWithSignificantDigits(_ value: Double, min: Int?, max: Int?) -> String {
         let isNegative = value < 0
-        let absoluteValue = abs(value)
+        let absoluteValue = ISO_9899.Math.fabs(value)
 
         if absoluteValue == 0 {
             let minDigits = min ?? 1
