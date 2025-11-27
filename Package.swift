@@ -33,8 +33,9 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(path: "../swift-standards"),
-        .package(path: "../swift-iso-9899")
+        .package(url: "https://github.com/swift-standards/swift-standards.git", from: "0.1.0"),
+        .package(url: "https://github.com/swift-standards/swift-svg-standard.git", from: "0.1.0"),
+        .package(url: "https://github.com/swift-standards/swift-iso-9899.git", from: "0.1.0"),
     ],
     targets: [
         .target(
