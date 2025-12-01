@@ -31,9 +31,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .build
-          key: ${{ runner.os }}-swift62-spm-${{ github.sha }}
+          key: macos-swift62-spm-${{ hashFiles('Package.swift', 'Package@*.swift') }}
           restore-keys: |
-            ${{ runner.os }}-swift62-spm-
+            macos-swift62-spm-
 
       # Note: swift test builds automatically, no separate build step needed
       - name: Test
@@ -69,8 +69,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .build
-          key: ${{ runner.os }}-swift62-spm-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-swift62-spm-
+          key: linux-swift62-spm-${{ hashFiles('Package.swift', 'Package@*.swift') }}
+          restore-keys: linux-swift62-spm-
 
       # Note: swift test builds automatically in release mode
       - name: Test (release)
@@ -89,8 +89,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .build
-          key: ${{ runner.os }}-swift62-compat-spm-${{ github.sha }}
-          restore-keys: ${{ runner.os }}-swift62-compat-spm-
+          key: linux-swift62-compat-spm-${{ hashFiles('Package.swift', 'Package@*.swift') }}
+          restore-keys: linux-swift62-compat-spm-
 
       # Note: swift test builds automatically
       - name: Test (Swift 6.2)
