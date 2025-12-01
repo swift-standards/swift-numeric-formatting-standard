@@ -4,6 +4,7 @@
 // Comprehensive tests for Foundation-compatible numeric formatting API
 
 import Testing
+
 @testable import Numeric_Formatting
 
 @Suite
@@ -43,16 +44,16 @@ struct `Format.Numeric.Style Tests` {
         func `compact notation`() {
             #expect(1000.formatted(.number.notation(.compactName)) == "1K")
             #expect(1500.formatted(.number.notation(.compactName)) == "1.5K")
-            #expect(1000000.formatted(.number.notation(.compactName)) == "1M")
-            #expect(1500000.formatted(.number.notation(.compactName)) == "1.5M")
-            #expect(1000000000.formatted(.number.notation(.compactName)) == "1B")
+            #expect(1_000_000.formatted(.number.notation(.compactName)) == "1M")
+            #expect(1_500_000.formatted(.number.notation(.compactName)) == "1.5M")
+            #expect(1_000_000_000.formatted(.number.notation(.compactName)) == "1B")
         }
 
         @Test
         func `scientific notation`() {
             #expect(1234.formatted(.number.notation(.scientific)) == "1.234E3")
             #expect(0.00001.formatted(.number.notation(.scientific)) == "1E-5")
-            #expect(1000000.formatted(.number.notation(.scientific)) == "1E6")
+            #expect(1_000_000.formatted(.number.notation(.scientific)) == "1E6")
         }
     }
 
@@ -97,13 +98,13 @@ struct `Format.Numeric.Style Tests` {
 
         @Test
         func `automatic grouping`() {
-            #expect(1234567.formatted(.number.grouping(.automatic)) == "1,234,567")
+            #expect(1_234_567.formatted(.number.grouping(.automatic)) == "1,234,567")
             #expect(100.formatted(.number.grouping(.automatic)) == "100")
         }
 
         @Test
         func `never use grouping`() {
-            #expect(1234567.formatted(.number.grouping(.never)) == "1234567")
+            #expect(1_234_567.formatted(.number.grouping(.never)) == "1234567")
             #expect(1000.formatted(.number.grouping(.never)) == "1000")
         }
     }
@@ -215,8 +216,13 @@ struct `Format.Numeric.Style Tests` {
 
         @Test
         func `combined with ranges`() {
-            #expect(42.5.formatted(.number.precision(.integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3))) == "42.5")
-            #expect(1.formatted(.number.precision(.integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3))) == "01.0")
+            #expect(
+                42.5.formatted(
+                    .number.precision(.integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3))) == "42.5"
+            )
+            #expect(
+                1.formatted(.number.precision(.integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3)))
+                    == "01.0")
         }
     }
 
@@ -322,7 +328,7 @@ struct `Format.Numeric.Style Tests` {
         @Test
         func `compact with precision`() {
             #expect(1500.formatted(.number.notation(.compactName).precision(.fractionLength(2))) == "1.50K")
-            #expect(1234567.formatted(.number.notation(.compactName).precision(.fractionLength(1))) == "1.2M")
+            #expect(1_234_567.formatted(.number.notation(.compactName).precision(.fractionLength(1))) == "1.2M")
         }
 
         @Test
@@ -332,20 +338,21 @@ struct `Format.Numeric.Style Tests` {
 
         @Test
         func `grouping with sign display`() {
-            #expect(1234567.formatted(.number.grouping(.automatic).sign(strategy: .always())) == "+1,234,567")
-            #expect((-1234567).formatted(.number.grouping(.automatic).sign(strategy: .always())) == "-1,234,567")
+            #expect(1_234_567.formatted(.number.grouping(.automatic).sign(strategy: .always())) == "+1,234,567")
+            #expect((-1_234_567).formatted(.number.grouping(.automatic).sign(strategy: .always())) == "-1,234,567")
         }
 
         @Test
         func `full formatting chain`() {
-            #expect(1234.5678.formatted(
-                .number
-                    .notation(.automatic)
-                    .grouping(.automatic)
-                    .precision(.fractionLength(2))
-                    .sign(strategy: .always())
-                    .decimalSeparator(strategy: .always)
-            ) == "+1,234.57")
+            #expect(
+                1234.5678.formatted(
+                    .number
+                        .notation(.automatic)
+                        .grouping(.automatic)
+                        .precision(.fractionLength(2))
+                        .sign(strategy: .always())
+                        .decimalSeparator(strategy: .always)
+                ) == "+1,234.57")
         }
     }
 
@@ -359,7 +366,7 @@ struct `Format.Numeric.Style Tests` {
             let int8: Int8 = 42
             let int16: Int16 = 1000
             let int32: Int32 = 100000
-            let int64: Int64 = 1000000
+            let int64: Int64 = 1_000_000
 
             #expect(int8.formatted(.number) == "42")
             #expect(int16.formatted(.number.grouping(.automatic)) == "1,000")
@@ -371,7 +378,7 @@ struct `Format.Numeric.Style Tests` {
         func `UInt types`() {
             let uint8: UInt8 = 255
             let uint16: UInt16 = 65535
-            let uint32: UInt32 = 4294967295
+            let uint32: UInt32 = 4_294_967_295
 
             #expect(uint8.formatted(.number) == "255")
             #expect(uint16.formatted(.number.grouping(.automatic)) == "65,535")

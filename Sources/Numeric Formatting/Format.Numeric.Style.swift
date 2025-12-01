@@ -337,9 +337,8 @@ extension Format.Numeric.Style {
         let intValue = Int64(value)
 
         // If any of these features are needed, convert to Double for proper handling
-        if scale != 1.0 || notation != .automatic || roundingRule != nil ||
-           significantDigits != nil || minimumFractionDigits != nil ||
-           decimalSeparatorStrategy == .always {
+        if scale != 1.0 || notation != .automatic || roundingRule != nil || significantDigits != nil
+            || minimumFractionDigits != nil || decimalSeparatorStrategy == .always {
             return format(Double(intValue))
         }
 
@@ -551,7 +550,7 @@ extension Format.Numeric.Style {
         }
 
         // Format mantissa with trailing zeros removed
-        let rounded = (value * 1000000).rounded() / 1000000
+        let rounded = (value * 1_000_000).rounded() / 1_000_000
         let intPart = Int64(rounded)
         let fracPart = rounded - Double(intPart)
 
@@ -726,6 +725,3 @@ extension Format.Numeric.Style {
 }
 
 // MARK: - Value Extensions
-
-
-

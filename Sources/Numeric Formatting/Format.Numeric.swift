@@ -15,5 +15,5 @@ public import Formatting
 ///
 /// Built on ISO 9899 (C Standard Library Math) for hardware-accelerated operations.
 extension Format {
-    public enum Numeric { }
+    public enum Numeric {}
 }
