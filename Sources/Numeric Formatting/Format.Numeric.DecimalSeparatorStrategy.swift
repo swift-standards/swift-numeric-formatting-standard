@@ -1,22 +1,8 @@
-//
-//  Format.Numeric.DecimalSeparatorStrategy.swift
-//  swift-numeric-formatting-standard
-//
-//  Decimal separator display strategies
-//
+// Format.Numeric.DecimalSeparatorStrategy.swift
+// Style extension for decimal separator configuration.
+// The DecimalSeparatorStrategy enum is defined in swift-standards/Sources/Formatting/Format.Numeric.DecimalSeparatorStrategy.swift
 
 public import Formatting
-
-extension Format.Numeric {
-    /// Decimal separator display strategy
-    public enum DecimalSeparatorStrategy: Sendable {
-        /// Show decimal separator only when needed (default)
-        case automatic
-
-        /// Always show decimal separator
-        case always
-    }
-}
 
 // MARK: - Style Extension
 

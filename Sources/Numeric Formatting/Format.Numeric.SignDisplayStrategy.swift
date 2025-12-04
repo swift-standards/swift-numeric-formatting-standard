@@ -1,25 +1,8 @@
-//
-//  Format.Numeric.SignDisplayStrategy.swift
-//  swift-numeric-formatting-standard
-//
-//  Sign display strategies for numeric formatting
-//
+// Format.Numeric.SignDisplayStrategy.swift
+// Style extension for sign display configuration.
+// The SignDisplayStrategy enum is defined in swift-standards/Sources/Formatting/Format.Numeric.SignDisplayStrategy.swift
 
 public import Formatting
-
-extension Format.Numeric {
-    /// Sign display strategy
-    public enum SignDisplayStrategy: Sendable {
-        /// Show sign for negative numbers only (default)
-        case automatic
-
-        /// Never show sign
-        case never
-
-        /// Always show sign
-        case always(includingZero: Bool = false)
-    }
-}
 
 // MARK: - Style Extension
 

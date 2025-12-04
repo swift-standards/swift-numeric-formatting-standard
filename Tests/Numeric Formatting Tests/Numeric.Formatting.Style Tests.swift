@@ -4,6 +4,7 @@
 // Comprehensive tests for Foundation-compatible numeric formatting API
 
 import Testing
+import Formatting
 
 @testable import Numeric_Formatting
 

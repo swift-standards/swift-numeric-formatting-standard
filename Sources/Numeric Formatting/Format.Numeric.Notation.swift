@@ -1,25 +1,8 @@
-//
-//  Format.Numeric.Notation.swift
-//  swift-numeric-formatting-standard
-//
-//  Notation styles for numeric formatting
-//
+// Format.Numeric.Notation.swift
+// Style extension for notation configuration.
+// The Notation enum is defined in swift-standards/Sources/Formatting/Format.Numeric.Notation.swift
 
 public import Formatting
-
-extension Format.Numeric {
-    /// Notation style for numeric formatting
-    public enum Notation: Sendable {
-        /// Automatic notation (default)
-        case automatic
-
-        /// Compact notation (1K, 1M, 1B)
-        case compactName
-
-        /// Scientific notation (1E3)
-        case scientific
-    }
-}
 
 // MARK: - Style Extension
 

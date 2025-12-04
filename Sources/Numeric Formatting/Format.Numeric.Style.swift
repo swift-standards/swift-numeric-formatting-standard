@@ -21,7 +21,10 @@ extension Format.Numeric {
     /// 3.14159.formatted(.number.precision(.fractionLength(2)))  // "3.14"
     /// 1234567.formatted(.number.grouping(.always))  // "1,234,567"
     /// ```
-    public struct Style: Sendable {
+    public struct Style: FormatStyle {
+        public typealias FormatInput = Double
+        public typealias FormatOutput = String
+
         internal var maximumFractionDigits: Int?
         internal var minimumFractionDigits: Int?
         internal var groupingSeparator: String?
@@ -165,7 +168,7 @@ extension Format.Numeric.Style {
 
 extension Format.Numeric.Style {
     /// Format a floating-point value
-    internal func format<Value: BinaryFloatingPoint>(_ value: Value) -> String {
+    public func format<Value: BinaryFloatingPoint>(_ value: Value) -> String {
         var doubleValue = Double(value)
 
         // Apply scale first
@@ -333,7 +336,7 @@ extension Format.Numeric.Style {
     }
 
     /// Format an integer value
-    internal func format<Value: BinaryInteger>(_ value: Value) -> String {
+    public func format<Value: BinaryInteger>(_ value: Value) -> String {
         let intValue = Int64(value)
 
         // If any of these features are needed, convert to Double for proper handling
