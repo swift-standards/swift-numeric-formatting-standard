@@ -345,8 +345,7 @@ extension Format.Numeric.Style {
 
         // If any of these features are needed, convert to Double for proper handling
         if scale != 1.0 || notation != .automatic || roundingRule != nil || significantDigits != nil
-            || minimumFractionDigits != nil || decimalSeparatorStrategy == .always
-        {
+            || minimumFractionDigits != nil || decimalSeparatorStrategy == .always {
             return format(Double(intValue))
         }
 
