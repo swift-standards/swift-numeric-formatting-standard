@@ -234,7 +234,11 @@ extension Format.Numeric.Style {
             // If so, fall back to the old method
             if !shortestRep.contains("e") && !shortestRep.contains("E") {
                 // Parse the string to extract integer and fractional parts
-                let parts = shortestRep.split(separator: ".", maxSplits: 1, omittingEmptySubsequences: false)
+                let parts = shortestRep.split(
+                    separator: ".",
+                    maxSplits: 1,
+                    omittingEmptySubsequences: false
+                )
                 let integerPartString = String(parts[0])
                 var fractionalPartString = parts.count > 1 ? String(parts[1]) : ""
 
@@ -341,7 +345,8 @@ extension Format.Numeric.Style {
 
         // If any of these features are needed, convert to Double for proper handling
         if scale != 1.0 || notation != .automatic || roundingRule != nil || significantDigits != nil
-            || minimumFractionDigits != nil || decimalSeparatorStrategy == .always {
+            || minimumFractionDigits != nil || decimalSeparatorStrategy == .always
+        {
             return format(Double(intValue))
         }
 
@@ -362,7 +367,8 @@ extension Format.Numeric.Style {
         // Apply integer length padding if specified
         if let (minLen, _) = integerLength {
             if let min = minLen, integerString.count < min {
-                integerString = String(repeating: "0", count: min - integerString.count) + integerString
+                integerString =
+                    String(repeating: "0", count: min - integerString.count) + integerString
             }
         }
 

@@ -3,8 +3,8 @@
 //
 // Comprehensive tests for Foundation-compatible numeric formatting API
 
-import Testing
 import Formatting
+import Testing
 
 @testable import Numeric_Formatting
 
@@ -211,19 +211,35 @@ struct `Format.Numeric.Style Tests` {
 
         @Test
         func `combined integer and fraction length`() {
-            #expect(42.5.formatted(.number.precision(.integerAndFractionLength(integer: 4, fraction: 2))) == "0042.50")
-            #expect(1.23.formatted(.number.precision(.integerAndFractionLength(integer: 2, fraction: 3))) == "01.230")
+            #expect(
+                42.5.formatted(
+                    .number.precision(.integerAndFractionLength(integer: 4, fraction: 2))
+                ) == "0042.50"
+            )
+            #expect(
+                1.23.formatted(
+                    .number.precision(.integerAndFractionLength(integer: 2, fraction: 3))
+                ) == "01.230"
+            )
         }
 
         @Test
         func `combined with ranges`() {
             #expect(
                 42.5.formatted(
-                    .number.precision(.integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3))) == "42.5"
+                    .number.precision(
+                        .integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3)
+                    )
+                ) == "42.5"
             )
             #expect(
-                1.formatted(.number.precision(.integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3)))
-                    == "01.0")
+                1.formatted(
+                    .number.precision(
+                        .integerAndFractionLength(integerLimits: 2...4, fractionLimits: 1...3)
+                    )
+                )
+                    == "01.0"
+            )
         }
     }
 
@@ -273,9 +289,17 @@ struct `Format.Numeric.Style Tests` {
 
         @Test
         func `rounding with increment`() {
-            #expect(1.23.formatted(.number.rounded(rule: .toNearestOrAwayFromZero, increment: 0.5)) == "1.0")
-            #expect(1.26.formatted(.number.rounded(rule: .toNearestOrAwayFromZero, increment: 0.5)) == "1.5")
-            #expect(42.formatted(.number.rounded(rule: .toNearestOrAwayFromZero, increment: 5)) == "40")
+            #expect(
+                1.23.formatted(.number.rounded(rule: .toNearestOrAwayFromZero, increment: 0.5))
+                    == "1.0"
+            )
+            #expect(
+                1.26.formatted(.number.rounded(rule: .toNearestOrAwayFromZero, increment: 0.5))
+                    == "1.5"
+            )
+            #expect(
+                42.formatted(.number.rounded(rule: .toNearestOrAwayFromZero, increment: 5)) == "40"
+            )
         }
     }
 
@@ -328,19 +352,34 @@ struct `Format.Numeric.Style Tests` {
 
         @Test
         func `compact with precision`() {
-            #expect(1500.formatted(.number.notation(.compactName).precision(.fractionLength(2))) == "1.50K")
-            #expect(1_234_567.formatted(.number.notation(.compactName).precision(.fractionLength(1))) == "1.2M")
+            #expect(
+                1500.formatted(.number.notation(.compactName).precision(.fractionLength(2)))
+                    == "1.50K"
+            )
+            #expect(
+                1_234_567.formatted(.number.notation(.compactName).precision(.fractionLength(1)))
+                    == "1.2M"
+            )
         }
 
         @Test
         func `scientific with significant digits`() {
-            #expect(1234.5678.formatted(.number.notation(.scientific).precision(.significantDigits(3))) == "1.23E3")
+            #expect(
+                1234.5678.formatted(.number.notation(.scientific).precision(.significantDigits(3)))
+                    == "1.23E3"
+            )
         }
 
         @Test
         func `grouping with sign display`() {
-            #expect(1_234_567.formatted(.number.grouping(.automatic).sign(strategy: .always())) == "+1,234,567")
-            #expect((-1_234_567).formatted(.number.grouping(.automatic).sign(strategy: .always())) == "-1,234,567")
+            #expect(
+                1_234_567.formatted(.number.grouping(.automatic).sign(strategy: .always()))
+                    == "+1,234,567"
+            )
+            #expect(
+                (-1_234_567).formatted(.number.grouping(.automatic).sign(strategy: .always()))
+                    == "-1,234,567"
+            )
         }
 
         @Test
@@ -353,7 +392,8 @@ struct `Format.Numeric.Style Tests` {
                         .precision(.fractionLength(2))
                         .sign(strategy: .always())
                         .decimalSeparator(strategy: .always)
-                ) == "+1,234.57")
+                ) == "+1,234.57"
+            )
         }
     }
 

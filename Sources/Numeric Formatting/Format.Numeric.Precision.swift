@@ -45,12 +45,16 @@ extension Format.Numeric.Style.Precision {
     }
 
     /// Maximum fraction digits
-    public static func fractionLength(_ range: PartialRangeThrough<Int>) -> Format.Numeric.Style.Precision {
+    public static func fractionLength(
+        _ range: PartialRangeThrough<Int>
+    ) -> Format.Numeric.Style.Precision {
         Format.Numeric.Style.Precision(min: nil, max: range.upperBound)
     }
 
     /// Minimum fraction digits
-    public static func fractionLength(_ range: PartialRangeFrom<Int>) -> Format.Numeric.Style.Precision {
+    public static func fractionLength(
+        _ range: PartialRangeFrom<Int>
+    ) -> Format.Numeric.Style.Precision {
         Format.Numeric.Style.Precision(min: range.lowerBound, max: nil)
     }
 }
@@ -68,7 +72,9 @@ extension Format.Numeric.Style.Precision {
     }
 
     /// Minimum to maximum significant digits
-    public static func significantDigits(_ range: ClosedRange<Int>) -> Format.Numeric.Style.Precision {
+    public static func significantDigits(
+        _ range: ClosedRange<Int>
+    ) -> Format.Numeric.Style.Precision {
         Format.Numeric.Style.Precision(
             min: nil,
             max: nil,
@@ -77,7 +83,9 @@ extension Format.Numeric.Style.Precision {
     }
 
     /// Maximum significant digits
-    public static func significantDigits(_ range: PartialRangeThrough<Int>) -> Format.Numeric.Style.Precision {
+    public static func significantDigits(
+        _ range: PartialRangeThrough<Int>
+    ) -> Format.Numeric.Style.Precision {
         Format.Numeric.Style.Precision(
             min: nil,
             max: nil,
@@ -86,7 +94,9 @@ extension Format.Numeric.Style.Precision {
     }
 
     /// Minimum significant digits
-    public static func significantDigits(_ range: PartialRangeFrom<Int>) -> Format.Numeric.Style.Precision {
+    public static func significantDigits(
+        _ range: PartialRangeFrom<Int>
+    ) -> Format.Numeric.Style.Precision {
         Format.Numeric.Style.Precision(
             min: nil,
             max: nil,
@@ -117,7 +127,9 @@ extension Format.Numeric.Style.Precision {
     }
 
     /// Maximum integer length
-    public static func integerLength(_ range: PartialRangeThrough<Int>) -> Format.Numeric.Style.Precision {
+    public static func integerLength(
+        _ range: PartialRangeThrough<Int>
+    ) -> Format.Numeric.Style.Precision {
         Format.Numeric.Style.Precision(
             min: nil,
             max: nil,
@@ -126,7 +138,9 @@ extension Format.Numeric.Style.Precision {
     }
 
     /// Minimum integer length
-    public static func integerLength(_ range: PartialRangeFrom<Int>) -> Format.Numeric.Style.Precision {
+    public static func integerLength(
+        _ range: PartialRangeFrom<Int>
+    ) -> Format.Numeric.Style.Precision {
         Format.Numeric.Style.Precision(
             min: nil,
             max: nil,
